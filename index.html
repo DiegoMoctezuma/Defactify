@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defactify AI Image Detector - Forensic Verification Tool</title>
+    
+    <!-- Meta tags for premium SEO -->
+    <meta name="description" content="Defactify es una herramienta de análisis forense impulsada por IA para detectar imágenes generadas artificialmente y fotos reales con precisión científica.">
+    <meta name="keywords" content="Defactify, AI Detector, Image Forensics, Fake Image detection, EfficientNet-B0, Real vs AI">
+    <meta name="author" content="Defactify Team">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-animated">
+
+    <!-- 1. Forensic Grid Canvas Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- 2. Sticky Glass Header Navigation -->
+    <header class="top-nav glass-header">
+        <a href="#" class="logo" id="nav-logo-btn">
+            <span class="material-symbols-outlined">account_balance</span>
+            Defactify
+        </a>
+        <nav class="nav-links">
+            <a href="#" class="nav-link active" id="nav-guide-btn">Guía</a>
+            <a href="#" class="nav-link" id="nav-analyze-btn">Analizar</a>
+        </nav>
+    </header>
+
+    <!-- 3. Main Content Container -->
+    <main class="app-container">
+
+        <!-- SCREEN A: ONBOARDING -->
+        <section id="screen-onboarding" class="screen active">
+            <div class="glass-panel onboarding-card">
+                <!-- Left Side: Visuals & Methodology -->
+                <div class="onboarding-left">
+                    <div class="brand-badge">
+                        <span class="material-symbols-outlined">account_balance</span>
+                        <h3>Defactify</h3>
+                    </div>
+                    <h1 class="onboarding-title">Descubra la Verdad en Imágenes</h1>
+                    <p class="onboarding-desc">Un análisis forense impulsado por IA para distinguir entre fotografías reales e imágenes generadas artificialmente con precisión científica.</p>
+                    
+                    <!-- Methodology Diagram -->
+                    <div class="methodology-box">
+                        <img src="assets/methodology.png" alt="Diagrama Metodología Forense Defactify" id="onboarding-diag-img">
+                    </div>
+                    <div class="methodology-tag">
+                        <span class="material-symbols-outlined">science</span>
+                        Metodología de Análisis
+                    </div>
+                </div>
+
+                <!-- Right Side: Educational Content & CTA -->
+                <div class="onboarding-right">
+                    <div class="features-list">
+                        <!-- Section 1 -->
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper icon-purple">
+                                <span class="material-symbols-outlined">troubleshoot</span>
+                            </div>
+                            <div>
+                                <h2 class="feature-title">Detección Inteligente</h2>
+                                <p class="feature-desc">Nuestro sistema evalúa artefactos visuales, consistencia de iluminación y anomalías a nivel de píxel que el ojo humano suele pasar por alto, diferenciando lo real de lo artificial.</p>
+                            </div>
+                        </div>
+                        <!-- Section 2 -->
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper icon-blue">
+                                <span class="material-symbols-outlined">analytics</span>
+                            </div>
+                            <div>
+                                <h2 class="feature-title">Precisión Forense</h2>
+                                <p class="feature-desc">Impulsado por el modelo EfficientNet-B0, optimizado para la clasificación de imágenes de alta eficiencia, garantizando resultados rápidos y confiables en cada análisis.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="cta-container">
+                        <button class="btn-primary" id="start-analysis-btn">
+                            Comenzar Análisis
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCREEN B: ANALYSIS DASHBOARD -->
+        <section id="screen-dashboard" class="screen">
+            <div class="dashboard-grid">
+                
+                <!-- Left Column: Image Upload & Demos -->
+                <div class="dashboard-left">
+                    <div class="glass-panel analysis-card">
+                        <!-- Dropzone Area -->
+                        <div class="dropzone-container" id="dropzone">
+                            <!-- Visual representation (Default state) -->
+                            <div id="upload-default-view" class="upload-default-view">
+                                <div class="upload-icon-circle" id="upload-icon">
+                                    <span class="material-symbols-outlined">cloud_upload</span>
+                                </div>
+                                <div id="upload-text">
+                                    <p class="dropzone-title">Subir o Tomar Foto</p>
+                                    <p class="dropzone-desc">Arrastra un archivo aquí o haz clic para examinar tu dispositivo.</p>
+                                </div>
+                                
+                                <!-- Camera activation trigger button -->
+                                <button type="button" class="btn-camera-trigger" id="camera-trigger-btn">
+                                    <span class="material-symbols-outlined">photo_camera</span>
+                                    Tomar Foto con Cámara
+                                </button>
+                            </div>
+
+                            <!-- Webcam View (Webcam Active state, initially hidden) -->
+                            <div class="camera-stream-wrapper" id="camera-stream-wrapper" style="display: none;">
+                                <video id="camera-video" autoplay playsinline muted></video>
+                                <div class="camera-controls">
+                                    <button type="button" class="btn-camera-action btn-capture" id="camera-capture-btn">
+                                        <span class="material-symbols-outlined">fiber_manual_record</span>
+                                        Capturar
+                                    </button>
+                                    <button type="button" class="btn-camera-action btn-cancel" id="camera-close-btn">
+                                        <span class="material-symbols-outlined">close</span>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Preview Wrapper (Initially Hidden) -->
+                            <div class="preview-wrapper" id="preview-wrapper" style="display: none;">
+                                <img src="" alt="Previsualización Forense" id="preview-img" class="preview-img">
+                                <!-- Scanning grid lines overlay -->
+                                <div class="scanning-grid" id="scanning-grid"></div>
+                                <!-- Floating scanline overlay -->
+                                <div class="scanline" id="scanline"></div>
+                                <!-- Aiming targets -->
+                                <div class="forensic-target" id="reticle"></div>
+                                <!-- Remove file button -->
+                                <button class="btn-reset-preview" id="reset-preview-btn" title="Eliminar imagen">
+                                    <span class="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+
+                            <!-- Native input tag hidden -->
+                            <input type="file" id="image-input" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Results & Metrics -->
+                <div class="dashboard-right">
+                    <div class="glass-panel analysis-card">
+                        
+                        <!-- Header with Status Indicator -->
+                        <div class="results-header">
+                            <h2>Resultado del Análisis</h2>
+                            <div class="verdict-chip chip-neutral" id="verdict-chip">
+                                <span class="material-symbols-outlined" id="verdict-icon">analytics</span>
+                                <span id="verdict-text">Inconcluso</span>
+                            </div>
+                        </div>
+
+                        <!-- Visual progress gauges -->
+                        <div class="metrics-list">
+                            <!-- Gauge Real -->
+                            <div class="metric-container">
+                                <div class="metric-label-row">
+                                    <span class="metric-name">Fotografía Real (Física)</span>
+                                    <span class="metric-value value-neutral" id="score-real-val">50%</span>
+                                </div>
+                                <div class="metric-track">
+                                    <div class="metric-fill fill-neutral" id="score-real-fill" style="width: 50%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Gauge AI -->
+                            <div class="metric-container">
+                                <div class="metric-label-row">
+                                    <span class="metric-name">Imagen Sintética (Generada por IA)</span>
+                                    <span class="metric-value value-neutral" id="score-ai-val">50%</span>
+                                </div>
+                                <div class="metric-track">
+                                    <div class="metric-fill fill-neutral" id="score-ai-fill" style="width: 50%;"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 4. Responsive Page Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="material-symbols-outlined">account_balance</span>
+                Defactify AI
+            </div>
+            <p class="footer-text">© 2026 Defactify. Academic AI Image Analysis Tool. Licencia Educativa.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Metodología</a>
+                <a href="#" class="footer-link">Privacidad</a>
+                <a href="#" class="footer-link">Condiciones</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 6. Mobile Sticky Bottom Nav -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="mobile-nav-btn active" id="mobile-guide-btn">
+            <span class="material-symbols-outlined">info</span>
+            Guía
+        </a>
+        <a href="#" class="mobile-nav-btn" id="mobile-analyze-btn">
+            <div class="mobile-nav-btn-highlight">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+            </div>
+            Analizar
+        </a>
+    </nav>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Script Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
